@@ -327,9 +327,9 @@ public class PlayerScript : MonoBehaviour
         {
             if (en.gameObject.CompareTag("Enemy"))
             {
-                if (Vector2.Distance(Crosshair.transform.position, en.gameObject.transform.position) < distance)
+                if (Vector2.Distance(transform.position, en.gameObject.transform.position) < distance)
                 {
-                    distance = Vector2.Distance(Crosshair.transform.position, en.gameObject.transform.position);
+                    distance = Vector2.Distance(transform.position, en.gameObject.transform.position);
                     closestEn = en.gameObject;
                 }
             }
@@ -433,6 +433,10 @@ public class PlayerScript : MonoBehaviour
             }
 
         }
+        else if (whipVfxObject.activeSelf && closestOnStart == null)
+        {
+            whipVfxObject.SetActive(false); 
+        }
     }
     private void UpdateDash()
     {
@@ -452,6 +456,10 @@ public class PlayerScript : MonoBehaviour
             }
             isDashing = false;
         }
+    }
+    public float GetDashTimer()
+    {
+        return dashTimer;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

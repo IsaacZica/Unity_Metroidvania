@@ -9,6 +9,6 @@ public abstract class EnemyScript : MonoBehaviour
     public GameObject deathParticles;
     public GameObject hitParticles;
     public float health;
-    public abstract void TakeDamage(float damage);
+    public abstract void TakeDamage(float damage, Transform hitTransform);
     public abstract void Die();
 }

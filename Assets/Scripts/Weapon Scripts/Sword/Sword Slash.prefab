@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5523282547508161606}
-  - component: {fileID: 3579236125574163154}
+  - component: {fileID: 2872822880433049683}
+  - component: {fileID: 5683541032005132010}
+  - component: {fileID: 3188405664594439960}
   m_Layer: 0
   m_Name: Sword Slash
   m_TagString: Sword Slash
@@ -33,7 +35,76 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &3579236125574163154
+--- !u!50 &2872822880433049683
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422747454508336819}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &5683541032005132010
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422747454508336819}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.2608482, y: 2.281066}
+      - {x: -0.027709171, y: 2.3098097}
+      - {x: -0.3213011, y: 2.282102}
+      - {x: -0.7013701, y: 2.2103033}
+      - {x: -0.98165065, y: 2.1077442}
+      - {x: -1.4222693, y: 1.7625928}
+      - {x: -1.8666456, y: 1.2872629}
+      - {x: -2.1727328, y: 0.79423046}
+      - {x: -2.334674, y: 0.29116583}
+      - {x: -2.3056283, y: -0.13380384}
+      - {x: -2.2877753, y: -0.63888884}
+      - {x: -2.142548, y: -0.8240082}
+      - {x: -0.5877852, y: -0.80901706}
+      - {x: 0.58778536, y: -0.80901694}
+      - {x: 2.151471, y: -0.809845}
+      - {x: 2.3322954, y: -0.28094482}
+      - {x: 2.338256, y: 0.26297998}
+      - {x: 2.1776958, y: 0.74539375}
+      - {x: 1.9529523, y: 1.2235417}
+      - {x: 1.6245946, y: 1.6488051}
+      - {x: 1.246875, y: 1.9396262}
+      - {x: 1.029545, y: 2.0813708}
+      - {x: 0.65039, y: 2.2241187}
+--- !u!61 &3188405664594439960
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +117,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.008661508, y: 1}
+  m_Offset: {x: 0, y: 1.15}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -57,7 +128,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5.5, y: 3}
+  m_Size: {x: 4.67, y: 2.34}
   m_EdgeRadius: 0
 --- !u!1001 &8947155309465963351
 PrefabInstance:

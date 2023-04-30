@@ -16,9 +16,11 @@ public class simpleEnemy : EnemyScript
         
     }
 
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, Transform hitTransform)
     {
         health -= damage;
+        GameObject h = Instantiate(hitParticles,transform.position,hitTransform.rotation);
+        Destroy(h, 1f);
         if (health <= 0)
         {
             Die();
@@ -27,6 +29,8 @@ public class simpleEnemy : EnemyScript
 
     public override void Die()
     {
-
+        GameObject d = Instantiate(deathParticles, transform.position, transform.rotation);
+        Destroy(d, 0.5f);
+        Destroy(gameObject);
     }
 }
