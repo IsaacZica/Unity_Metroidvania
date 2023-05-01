@@ -51,6 +51,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Dissintegration_step: 0.1
     - _DistortionScale: 2
     - _DistortionStrength: 0.15
     - _NoiseScale: 3
@@ -58,7 +59,9 @@ Material:
     - _QueueOffset: 0
     - _Speed: 1
     - _Step: 2
-    - _Thickness: 0
+    - _Thickness: 2
+    - _Voronoi_Scale: 5
+    - _Voronoi_Speed: 5
     m_Colors:
     - _BorderColor: {r: 4, g: 2.886275, b: 0, a: 0}
     - _Color: {r: 0.37696335, g: 1, b: 0.9633508, a: 0}

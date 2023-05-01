@@ -11,6 +11,7 @@ TagManager:
   - Weapon
   - Ground
   - Sword Slash
+  - Energy
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Water
   - UI
   - post
-  - 
+  - Player
   - 
   - 
   - Jumpable

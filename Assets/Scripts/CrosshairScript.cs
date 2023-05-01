@@ -18,6 +18,9 @@ public class CrosshairScript : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
+        Vector2 position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+        transform.position = position;
+
 
         GameObject closest = null;
         float distance = 1000f;
@@ -29,9 +32,7 @@ public class CrosshairScript : MonoBehaviour
                 closest = gm;
             }
         }
-        Vector2 position = Vector2.zero;
-        position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = position;
+        
 
         if (closest != null)
         {

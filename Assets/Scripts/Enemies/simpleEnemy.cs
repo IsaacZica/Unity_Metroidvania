@@ -13,7 +13,7 @@ public class simpleEnemy : EnemyScript
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
     public override void TakeDamage(float damage, Transform hitTransform)

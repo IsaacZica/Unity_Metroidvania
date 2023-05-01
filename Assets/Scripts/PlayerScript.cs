@@ -44,10 +44,10 @@ public class PlayerScript : MonoBehaviour
     private Collider2D enCollider;
     public List<Collider2D> whipEnemies;
 
-    [Header("Stamina")]
-    public int stamina;
-    public float staminaRegen;
-    public int maxStamina;
+    [Header("Energy")]
+    public float energy;
+    public float maxEnergy;
+    public int energyCollectionAmount = 1;
 
     [Header("Dashing")]
     public bool hasDash;
@@ -73,6 +73,7 @@ public class PlayerScript : MonoBehaviour
     [Header("Weapons")]
     public Weapon weapon1Script;
     public Weapon weapon2Script;
+    public bool isAttacking = false;
 
     [Header("Camera")]
     public Camera _camera;
@@ -192,7 +193,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Whip(InputAction.CallbackContext value)
     {
-        if (value.started && !whipVfxObject.activeSelf && whipDashTimer <= 0 && hasWhip && canWhip)
+        if (value.started && !whipVfxObject.activeSelf && whipDashTimer <= 0 && hasWhip && canWhip && !isAttacking)
         {
             canWhip = false;
             closestOnStart = closestEn;
@@ -209,7 +210,7 @@ public class PlayerScript : MonoBehaviour
     }
     public void Dash(InputAction.CallbackContext value)
     {
-        if (value.started && hasDash)
+        if (value.started && hasDash && !whipVfxObject.activeSelf && !isAttacking)
         {
             if (canDash && dashCooldownTimer <= 0)
             {
@@ -264,8 +265,6 @@ public class PlayerScript : MonoBehaviour
             if (movement.x < 0) facing = "left";
         }
        
-        Debug.Log(facing);
-
         movement.y = 0;
         if (movement.x > 0)
         {
@@ -478,20 +477,36 @@ public class PlayerScript : MonoBehaviour
             triggerCollisiion.Remove(collision);
         }
     }
-
-    public void LeftClick(InputAction.CallbackContext value)
+    private void OnParticleCollision(GameObject other)
     {
-        if (value.started)
+        if (other.CompareTag("Energy"))
+        {
+            energy++;
+            if (energy > maxEnergy) energy = maxEnergy;
+        }
+    }
+
+
+    public void Weapon1Attack(InputAction.CallbackContext value)
+    {
+        if (value.started && !isDashing && !whipVfxObject.activeSelf && !isAttacking)
         {
             weapon1Script.Attack();
         }
     }
-    public void RightClick(InputAction.CallbackContext value)
+    public void Weapon2Attack(InputAction.CallbackContext value)
     {
-        if (value.started)
+        if (value.started && !isDashing && !whipVfxObject.activeSelf && !isAttacking)
         {
             weapon2Script.Attack();
         }
+    }
+
+    public IEnumerator setPlayerIsAttacking(float time)
+    {
+        isAttacking = true;
+        yield return new WaitForSeconds(time);
+        isAttacking = false;
     }
 
 }

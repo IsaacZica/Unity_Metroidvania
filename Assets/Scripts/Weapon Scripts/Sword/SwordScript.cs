@@ -8,9 +8,12 @@ public class SwordScript : Weapon
     public float damage = 5;
 
     private PlayerScript player;
+    public GameObject LightOrbs;
+
     private GameObject g;
     private BoxCollider2D gCol;
     private PolygonCollider2D pCol;
+
 
     private bool hasPogoed = false;
 
@@ -46,6 +49,11 @@ public class SwordScript : Weapon
                         hitEnemiesList.Add(hit.gameObject);
                         en.TakeDamage(damage, g.transform);
 
+                        for (int i = 0; i < player.energyCollectionAmount; i++)
+                        {
+                            Instantiate(LightOrbs, hit.gameObject.transform.position, g.transform.rotation);
+                        }
+
                         if (g.transform.eulerAngles.z == 180 && en.givesUpwardVelocity && !hasPogoed)
                         {
                             player.rb.velocity = new Vector2(player.rb.velocity.x,player.JumpStrength/1.5f);
@@ -67,6 +75,8 @@ public class SwordScript : Weapon
         {
             Vector3 v = Vector3.zero;
 
+            
+
             if (player.facing == "right") v = new Vector3(0, 0, -90);
             else if (player.facing == "left") v = new Vector3(0, 0, 90);
             else if (player.facing == "up") v = new Vector3(0, 0, 0);
@@ -80,6 +90,8 @@ public class SwordScript : Weapon
                     player.canDash = true;
                 }
 
+                StartCoroutine(player.setPlayerIsAttacking(0.2f));
+
                 hasPogoed = false;
                 g = Instantiate(Slash, transform.position, transform.rotation);
                 g.transform.localScale = new Vector3(g.transform.localScale.x * scale, g.transform.localScale.y, g.transform.localScale.z);
@@ -88,9 +100,6 @@ public class SwordScript : Weapon
                 gCol = g.GetComponent<BoxCollider2D>();
                 pCol = g.GetComponent<PolygonCollider2D>();
                 Destroy(g, 0.3f);
-
-                
-
                 if (scale > 0) scale -= 2;
                 else if (scale < 0) scale += 2;
             }
