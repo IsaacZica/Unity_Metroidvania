@@ -8,7 +8,6 @@ public class LightSpear : Weapon
     public GameObject MaterializeVfx;
     public float Speed = 50;
 
-    private bool shouldMove = false;
     public float timeToMoveSpear = 8;
 
     private void Start()

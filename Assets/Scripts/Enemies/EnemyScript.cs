@@ -8,7 +8,11 @@ public abstract class EnemyScript : MonoBehaviour
     public bool damagesOnContact;
     public GameObject deathParticles;
     public GameObject hitParticles;
+    public Collider2D Collider;
     public float health;
-    public abstract void TakeDamage(float damage, Transform hitTransform);
+
+    protected PlayerScript player;
+
+    public abstract void TakeDamage(float damage,Transform hitTransform);
     public abstract void Die();
 }

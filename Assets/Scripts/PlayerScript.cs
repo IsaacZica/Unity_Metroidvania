@@ -9,10 +9,27 @@ public class PlayerScript : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [HideInInspector]
     private List<Collider2D> triggerCollisiion = new List<Collider2D>();
-    [HideInInspector]
     private LogicScript logic;
+    [Header("Canvas")]
+    public Canvas canvas;
+
+    [Header("Energy")]
+    public float energy;
+    public float maxEnergy;
+    public int energyCollectionAmount = 1;
+    [HideInInspector] public List<GameObject> hearths = new List<GameObject>();
+
+    [Header("Health")]
+    public float currentHealth;
+    public float maxHealth = 3;
+    public float InvincibilityTime = 1.5f;
+    public int NumberOfFlashes = 3;
+    private bool isInvincible = false;
+    public GameObject HeartPrefab;
+    public GameObject emptyHeartPrefab;
+    public GameObject damageParticles;
+    public Collider2D col;
 
     [Header("Jumping")]
     public float JumpStrength = 10;
@@ -33,6 +50,7 @@ public class PlayerScript : MonoBehaviour
     private GameObject closestEn;
     private Vector2 endPos;
     private bool canWhip = false;
+    private Collider2D encol;
 
     public float whipDashSpeed;
     private Vector2 whipDashMovement;
@@ -41,13 +59,7 @@ public class PlayerScript : MonoBehaviour
     public float whipDashTime = 1;
     private float whipDashTimer = 0;
     private GameObject closestOnStart;
-    private Collider2D enCollider;
     public List<Collider2D> whipEnemies;
-
-    [Header("Energy")]
-    public float energy;
-    public float maxEnergy;
-    public int energyCollectionAmount = 1;
 
     [Header("Dashing")]
     public bool hasDash;
@@ -94,6 +106,16 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
+
+        for (int i = 0; i < currentHealth; i++)
+        {
+            GameObject hearth = Instantiate(HeartPrefab,new Vector3(0,0,0), Quaternion.identity);
+            hearth.transform.SetParent(canvas.transform);
+            hearth.transform.localPosition = new Vector3(-94 + i*1.5f*hearth.transform.localScale.x, 54, -825);
+            hearths.Add(hearth);
+        }
+
         cmvCamTransposer = cmvCam.GetCinemachineComponent<CinemachineFramingTransposer>();
 
         if (weapon1Script != null)
@@ -341,9 +363,10 @@ public class PlayerScript : MonoBehaviour
         if (whipDashTimer <= 0)
         {
             whipIsDashing = false;
-            if (enCollider != null)
+            if (!whipVfxObject.activeSelf && encol != null)
             {
-                enCollider.enabled = true;
+                Physics2D.IgnoreCollision(col, encol, false);
+                isInvincible = false;
             }
         }
 
@@ -386,8 +409,9 @@ public class PlayerScript : MonoBehaviour
 
             Vector2 currentPos = transform.position;
             Vector2 newPos = currentPos + whipMovement * whipSpeed * Time.fixedDeltaTime;
+            Vector2 longNewPos = currentPos + whipMovement * (whipSpeed * 10) * Time.fixedDeltaTime;
 
-            RaycastHit2D[] hits = Physics2D.LinecastAll(currentPos, newPos);
+            RaycastHit2D[] hits = Physics2D.LinecastAll(currentPos, longNewPos);
 
             bool hitWall = false;
             foreach (RaycastHit2D hit in hits)
@@ -397,6 +421,8 @@ public class PlayerScript : MonoBehaviour
                     if (hit.collider.gameObject == closestOnStart.gameObject)
                     {
                         //Dash
+                        encol = hit.collider;
+                        Physics2D.IgnoreCollision(col,encol,true);
                         whipDashMovement = whipMovement;
                         whipIsDashing = true;
                         whipDashTimer = 1;
@@ -407,10 +433,8 @@ public class PlayerScript : MonoBehaviour
                         dS.SetActive(true);
                         Destroy(dS, 0.5f);
 
-                        hit.collider.enabled = false;
-                        enCollider = hit.collider;
-
                         canDash = true;
+                        isInvincible = true;
 
                         whipVfxObject.SetActive(false);
                     }
@@ -486,6 +510,34 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    [ContextMenu("TakeDamage")]
+    public void TakeDamage(int damage)
+    {
+        if (!isInvincible && currentHealth > 0)
+        {
+            StartCoroutine(SetPlayerInvincibility(InvincibilityTime));
+
+            currentHealth -= damage;
+            for (int i = 0; i < damage; i++)
+            {
+
+                GameObject emphearth = Instantiate(emptyHeartPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                emphearth.transform.SetParent(canvas.transform);
+                emphearth.transform.localPosition = hearths[hearths.Count - 1].transform.localPosition;
+
+                GameObject d = Instantiate(damageParticles, new Vector3(0, 0, 0), Quaternion.identity);
+                d.transform.localScale = new Vector3(0.5f / emphearth.transform.localScale.x, 0.5f / emphearth.transform.localScale.y, 0.5f / emphearth.transform.localScale.z);
+                d.transform.SetParent(canvas.transform);
+
+                d.transform.position = emphearth.transform.position;
+
+                Destroy(hearths[hearths.Count - 1]);
+                hearths.RemoveAt(hearths.Count - 1);
+
+            }
+        }
+    }
+
 
     public void Weapon1Attack(InputAction.CallbackContext value)
     {
@@ -507,6 +559,23 @@ public class PlayerScript : MonoBehaviour
         isAttacking = true;
         yield return new WaitForSeconds(time);
         isAttacking = false;
+    }
+    
+
+    public IEnumerator SetPlayerInvincibility(float time)
+    {
+        Physics2D.IgnoreLayerCollision(7, 8, true);
+        isInvincible = true;
+        for (int i = 0; i < NumberOfFlashes; i++)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.6f, 0.6f, 0.5f);
+
+            yield return new WaitForSeconds(time / (NumberOfFlashes * 2));
+            GetComponent<SpriteRenderer>().color = Color.white;
+            yield return new WaitForSeconds(time / (NumberOfFlashes * 2));
+        }
+        isInvincible = false;
+        Physics2D.IgnoreLayerCollision(7, 8, false);
     }
 
 }
